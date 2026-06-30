@@ -1,0 +1,90 @@
+version: "3.8"
+
+# ─────────────────────────────────────────────
+#  MRS — Fault-tolerant PostgreSQL cluster
+#  1 Primary  +  2 Standbys (hot standby)
+# ─────────────────────────────────────────────
+
+networks:
+  mrs-net:
+    driver: bridge
+
+volumes:
+  primary-data:
+  standby1-data:
+  standby2-data:
+
+services:
+
+  # ── PRIMARY ──────────────────────────────────
+  mrs-primary:
+    build:
+      context: ./primary
+    container_name: mrs-primary
+    hostname: mrs-primary
+    environment:
+      POSTGRES_USER: mrs_user
+      POSTGRES_PASSWORD: mrs_password
+      POSTGRES_DB: mrs_db
+      REPLICATION_USER: replicator
+      REPLICATION_PASSWORD: repl_password
+    volumes:
+      - primary-data:/var/lib/postgresql/data
+      - ../sql:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - mrs-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mrs_user -d mrs_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── STANDBY 1 ────────────────────────────────
+  mrs-standby-1:
+    build:
+      context: ./standby
+    container_name: mrs-standby-1
+    hostname: mrs-standby-1
+    environment:
+      POSTGRES_USER: mrs_user
+      POSTGRES_PASSWORD: mrs_password
+      POSTGRES_DB: mrs_db
+      REPLICATION_USER: replicator
+      REPLICATION_PASSWORD: repl_password
+      PRIMARY_HOST: mrs-primary
+      PRIMARY_PORT: 5432
+    volumes:
+      - standby1-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - mrs-net
+    depends_on:
+      mrs-primary:
+        condition: service_healthy
+
+  # ── STANDBY 2 ────────────────────────────────
+  mrs-standby-2:
+    build:
+      context: ./standby
+    container_name: mrs-standby-2
+    hostname: mrs-standby-2
+    environment:
+      POSTGRES_USER: mrs_user
+      POSTGRES_PASSWORD: mrs_password
+      POSTGRES_DB: mrs_db
+      REPLICATION_USER: replicator
+      REPLICATION_PASSWORD: repl_password
+      PRIMARY_HOST: mrs-primary
+      PRIMARY_PORT: 5432
+    volumes:
+      - standby2-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    networks:
+      - mrs-net
+    depends_on:
+      mrs-primary:
+        condition: service_healthy

@@ -1,0 +1,15 @@
+# PostgreSQL data directories (never commit these)
+**/data/
+**/*.pid
+
+# Environment files with secrets
+.env
+*.env
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
