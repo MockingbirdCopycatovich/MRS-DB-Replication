@@ -1,0 +1,138 @@
+.layout {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.banner {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  font-size: 13px;
+}
+
+.banner-warn {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.console {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.target {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.table-wrap {
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.error {
+  color: var(--danger);
+}
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.node-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.node-list li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.65rem;
+}
+
+.node-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.node-name {
+  font-weight: 600;
+}
+
+.node-meta {
+  display: flex;
+  gap: 0.6rem;
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 0.2rem;
+}
+
+.status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.status-active {
+  background: var(--status-active);
+}
+
+.status-delayed {
+  background: var(--status-delayed);
+}
+
+.status-resyncing {
+  background: var(--status-resyncing);
+}
+
+.status-provisioning {
+  background: var(--status-provisioning);
+}
+
+.status-inactive {
+  background: var(--status-inactive);
+}
+
+.status-failed {
+  background: var(--status-failed);
+}

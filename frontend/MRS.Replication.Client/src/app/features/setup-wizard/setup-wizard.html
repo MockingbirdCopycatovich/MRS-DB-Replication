@@ -1,0 +1,81 @@
+<div class="wizard">
+  <h1>MRS Replication — Setup</h1>
+  <p class="subtitle">Configure the Postgres cluster: connection, replica count, sync strategy and alert thresholds.</p>
+
+  <form (ngSubmit)="submit()" #form="ngForm">
+    <section>
+      <h2>Database</h2>
+      <div class="row">
+        <label>
+          User
+          <input name="postgresUser" [(ngModel)]="postgresUser" required />
+        </label>
+        <label>
+          Password
+          <input name="postgresPassword" type="password" [(ngModel)]="postgresPassword" required />
+        </label>
+        <label>
+          Database
+          <input name="postgresDb" [(ngModel)]="postgresDb" required />
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Replicas</h2>
+      <div class="row">
+        <label>
+          Number of replicas
+          <input name="replicaCount" type="number" min="0" max="10" [(ngModel)]="replicaCount" required />
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Replication strategy</h2>
+      <div class="row">
+        <label>
+          Mode
+          <select name="mode" [(ngModel)]="mode">
+            <option value="Async">Asynchronous (fire-and-forget, log lag)</option>
+            <option value="Sync">Synchronous (wait for replica ack)</option>
+          </select>
+        </label>
+        <label>
+          Sync timeout (ms)
+          <input name="syncTimeoutMs" type="number" min="100" [(ngModel)]="syncTimeoutMs" [disabled]="mode !== 'Sync'" />
+        </label>
+        <label>
+          Health-check interval (ms)
+          <input name="healthCheckIntervalMs" type="number" min="500" [(ngModel)]="healthCheckIntervalMs" />
+        </label>
+        <label>
+          Failures before "inactive"
+          <input name="failuresBeforeInactive" type="number" min="1" [(ngModel)]="failuresBeforeInactive" />
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Alert thresholds</h2>
+      <div class="row">
+        <label>
+          Alert if active nodes &lt;
+          <input name="minActiveNodes" type="number" min="0" [(ngModel)]="minActiveNodes" />
+        </label>
+        <label>
+          Alert if inactive nodes &gt;
+          <input name="maxInactiveNodes" type="number" min="0" [(ngModel)]="maxInactiveNodes" />
+        </label>
+      </div>
+    </section>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <button type="submit" [disabled]="submitting() || form.invalid">
+      {{ submitting() ? 'Provisioning…' : 'Deploy cluster' }}
+    </button>
+  </form>
+</div>

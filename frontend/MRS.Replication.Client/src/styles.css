@@ -1,0 +1,98 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --border: #dde1e6;
+  --text: #1b1f24;
+  --text-muted: #6b7280;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --danger: #dc2626;
+  --radius: 6px;
+
+  --status-active: #16a34a;
+  --status-delayed: #d97706;
+  --status-resyncing: #2563eb;
+  --status-provisioning: #6b7280;
+  --status-inactive: #9ca3af;
+  --status-failed: #dc2626;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+input,
+select,
+textarea {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem;
+  background: var(--surface);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  font-size: 13px;
+}
+
+code,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}

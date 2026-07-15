@@ -1,0 +1,77 @@
+<div class="layout">
+  @if (alertMessage()) {
+    <div class="banner">{{ alertMessage() }}</div>
+  }
+  @if (connectionLost()) {
+    <div class="banner banner-warn">Lost connection to Watchdog — retrying…</div>
+  }
+
+  <div class="content">
+    <main class="console">
+      <h1>SQL Console</h1>
+      <textarea rows="6" [(ngModel)]="sql" spellcheck="false"></textarea>
+      <div class="actions">
+        <button (click)="runQuery()" [disabled]="running()">
+          {{ running() ? 'Running…' : 'Run' }}
+        </button>
+        @if (result(); as res) {
+          <span class="target">
+            → {{ res.targetNodeName || '—' }} ({{ res.elapsedMs }} ms)
+          </span>
+        }
+      </div>
+
+      @if (result(); as res) {
+        @if (!res.success) {
+          <p class="error">{{ res.error }}</p>
+        } @else if (res.columns.length === 0) {
+          <p class="muted">OK — {{ res.rowsAffected }} row(s) affected.</p>
+        } @else {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  @for (col of res.columns; track col) {
+                    <th>{{ col }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of res.rows; track $index) {
+                  <tr>
+                    @for (col of res.columns; track col) {
+                      <td>{{ row[col] }}</td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    </main>
+
+    <aside class="sidebar">
+      <h2>Nodes</h2>
+      <ul class="node-list">
+        @for (node of nodes(); track node.id) {
+          <li>
+            <div class="node-row">
+              <span class="node-name">{{ node.name }}</span>
+              <span [class]="statusClass(node)">{{ node.status }}</span>
+            </div>
+            <div class="node-meta">
+              <span>{{ node.role }}</span>
+              <span>queue: {{ node.queueDepth }}</span>
+              @if (node.role === 'Replica') {
+                <span>lag: {{ node.lagBytes }}B</span>
+              }
+            </div>
+          </li>
+        } @empty {
+          <li class="muted">No nodes yet — run the Setup Wizard first.</li>
+        }
+      </ul>
+    </aside>
+  </div>
+</div>
